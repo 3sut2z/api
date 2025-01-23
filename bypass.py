@@ -8,11 +8,10 @@ def add_link():
     url = request.args.get('url')
     if url:
         start_time = time.time()
-
         duration = time.time() - start_time
-        return jsonify({"status": "success", "result": "Api Bypass Is In Progress", "duration": f"{duration:.6f}"})
+        return f'{{"status":"success","result":"Api Bypass Is In Progress","duration":"{duration:.6f}"}}'
     else:
-        return jsonify({"status": "error", "message": "Missing URL parameter"}), 400
+        return f'{{"status":"error","result":"Missing URL parameter"}}', 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050, debug=True)
