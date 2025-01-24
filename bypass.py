@@ -4,12 +4,11 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
 
-def bypass_linkvertise(url):
+def bypass_fluxus(start_url):
     try:
         chrome_options = Options()
         chrome_options.add_argument("--headless")
@@ -17,24 +16,27 @@ def bypass_linkvertise(url):
         chrome_options.add_argument("--disable-dev-shm-usage")
         
         service = Service(ChromeDriverManager().install())
-
         driver = webdriver.Chrome(service=service, options=chrome_options)
 
-        driver.get(url)
-
-        time.sleep(10)
-
-        try:
-            continue_button = driver.find_element_by_xpath('//button[contains(text(), "Continue")]')
-            continue_button.click()
-            time.sleep(5)
-        except Exception as e:
-            print("Không tìm thấy nút 'Continue' hoặc 'Skip Ad':", e)
-
-        final_url = driver.current_url
-        driver.quit()
-
-        return {"status": "success", "result": final_url}
+        if "https://flux.li/android/external/start.php" in start_url and "HWID=" in start_url:
+            
+            driver.get("https://linkvertise.com/580726/fluxus1")
+            time.sleep(2)
+            
+            driver.get("https://flux.li/android/external/check1.php?hash=")
+            time.sleep(2)
+            
+            driver.get("https://linkvertise.com/580726/fluxus")
+            time.sleep(2)
+            
+            driver.get("https://flux.li/android/external/main.php?hash=")
+            time.sleep(2)
+            
+            final_url = driver.current_url
+            driver.quit()
+            return {"status": "success", "result": final_url}
+        else:
+            return {"status": "error", "result": "Invalid URL"}
     except Exception as e:
         return {"status": "error", "result": str(e)}
 
@@ -44,7 +46,7 @@ def add_link():
     if url:
         start_time = time.time()
 
-        result = bypass_linkvertise(url)
+        result = bypass_fluxus(url)
 
         duration = time.time() - start_time
         result["duration"] = f"{duration:.16f}"
