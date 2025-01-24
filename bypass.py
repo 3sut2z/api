@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import time
 import requests
+import json
 
 app = Flask(__name__)
 
@@ -19,9 +20,6 @@ def bypass_linkvertise(url):
             return {"status": "error","result":"Unable to bypass Linkvertise URL"}
     except Exception as e:
         return {"status": "error","result": str(e)}
-
-@app.route('/api-bypass/addlink', methods=['GET'])
-import json
 
 @app.route('/api-bypass/addlink', methods=['GET'])
 def add_link():
