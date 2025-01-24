@@ -14,11 +14,11 @@ def bypass_linkvertise(url):
 
         if response.status_code == 302 or "location" in response.headers:
             original_url = response.headers["location"]
-            return {"status": "success","result": original_url,"duration":"{duration:.16f}"}
+            return {"status": "success", "result": original_url}
         else:
-            return {"status": "error","result": "Unable to bypass Linkvertise URL","duration":"{duration:.16f}"}
+            return {"status": "error", "result": "Unable to bypass Linkvertise URL"}
     except Exception as e:
-        return {"status": "error","result": str(e)}
+        return {"status": "error", "result": str(e)}
 
 @app.route('/api-bypass/addlink', methods=['GET'])
 def add_link():
@@ -31,8 +31,9 @@ def add_link():
         duration = time.time() - start_time
         result["duration"] = f"{duration:.16f}"
 
-        return f'<pre style="font-family: monospace;">{{"status":"success","result":"{result}","duration":"{duration:.16f}"}}</pre>'
+        return f'<pre style="font-family: monospace;">{result}</pre>'
     else:
+        duration = 0.0
         return f'<pre style="font-family: monospace;">{{"status":"error","result":"Missing URL parameter","duration":"{duration:.16f}"}}</pre>', 400
 
 if __name__ == '__main__':
