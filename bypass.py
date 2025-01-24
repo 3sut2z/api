@@ -15,7 +15,7 @@ def bypass_linkvertise(url):
 
         if response.status_code == 302 or "location" in response.headers:
             original_url = response.headers["location"]
-            return {"status": "success", "result": original_url}
+            return {"status": "success","result": original_url}
         else:
             return {"status": "error","result":"Unable to bypass Linkvertise URL"}
     except Exception as e:
@@ -36,9 +36,9 @@ def add_link():
     else:
         duration = 0.0
         error_result = {
-            "status": "error",
-            "result": "Missing URL parameter",
-            "duration": f"{duration:.16f}"
+            "status":"error",
+            "result":"Missing URL parameter",
+            "duration":f"{duration:.16f}"
         }
         return f'<pre style="font-family: monospace;">{json.dumps(error_result)}</pre>', 400
 
