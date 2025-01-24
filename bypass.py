@@ -1,21 +1,32 @@
 import json
 from flask import Flask, request
 import time
-import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
 
 def bypass_linkvertise(url):
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        }
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
 
-        response = requests.get(url, headers=headers, allow_redirects=False)
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-        if response.status_code == 302 or "location" in response.headers:
-            original_url = response.headers["location"]
-            return {"status": "success", "result": original_url}
+        driver.get(url)
+
+        time.sleep(5)
+
+        final_url = driver.current_url
+        driver.quit()
+
+        if "linkvertise" not in final_url:
+            return {"status": "success", "result": final_url}
         else:
             return {"status": "error", "result": "Unable to bypass Linkvertise URL"}
     except Exception as e:
