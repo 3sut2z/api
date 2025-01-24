@@ -15,20 +15,26 @@ def bypass_linkvertise(url):
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        
+        service = Service(ChromeDriverManager().install())
 
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
 
         driver.get(url)
 
-        time.sleep(5)
+        time.sleep(10)
+
+        try:
+            continue_button = driver.find_element_by_xpath('//button[contains(text(), "Continue")]')
+            continue_button.click()
+            time.sleep(5)
+        except Exception as e:
+            print("Không tìm thấy nút 'Continue' hoặc 'Skip Ad':", e)
 
         final_url = driver.current_url
         driver.quit()
 
-        if "linkvertise" not in final_url:
-            return {"status": "success", "result": final_url}
-        else:
-            return {"status": "error", "result": "Unable to bypass Linkvertise URL"}
+        return {"status": "success", "result": final_url}
     except Exception as e:
         return {"status": "error", "result": str(e)}
 
