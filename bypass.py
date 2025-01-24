@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+import json
+from flask import Flask, request
 import time
 import requests
-import json
 
 app = Flask(__name__)
 
@@ -15,11 +15,11 @@ def bypass_linkvertise(url):
 
         if response.status_code == 302 or "location" in response.headers:
             original_url = response.headers["location"]
-            return {"status": "success","result": original_url}
+            return {"status": "success", "result": original_url}
         else:
-            return {"status": "error","result":"Unable to bypass Linkvertise URL"}
+            return {"status": "error", "result": "Unable to bypass Linkvertise URL"}
     except Exception as e:
-        return {"status": "error","result": str(e)}
+        return {"status": "error", "result": str(e)}
 
 @app.route('/api-bypass/addlink', methods=['GET'])
 def add_link():
@@ -32,15 +32,15 @@ def add_link():
         duration = time.time() - start_time
         result["duration"] = f"{duration:.16f}"
 
-        return f'<pre style="font-family: monospace;">{json.dumps(result)}</pre>'
+        return f'<pre style="font-family: monospace;">{json.dumps(result, separators=(",", ":"))}</pre>'
     else:
         duration = 0.0
         error_result = {
-            "status":"error",
-            "result":"Missing URL parameter",
-            "duration":f"{duration:.16f}"
+            "status": "error",
+            "result": "Missing URL parameter",
+            "duration": f"{duration:.16f}"
         }
-        return f'<pre style="font-family: monospace;">{json.dumps(error_result)}</pre>', 400
+        return f'<pre style="font-family: monospace;">{json.dumps(error_result, separators=(",", ":"))}</pre>', 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050, debug=True)
