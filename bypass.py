@@ -14,7 +14,8 @@ def bypass_fluxus(start_url):
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        
+        chrome_options.binary_location = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
 
